@@ -1,0 +1,88 @@
+@BASE_URL = https://appwrite.okaki.org
+@LOGIN_EMAIL = "YOUREMAIL"
+@LOGIN_PASSWORD = "YOURPASSWORD"
+@APPWRITE_PROJECTID = YOURPROJECTID
+
+### E-Mail Auth --- creates new session, stores cookie
+POST {{BASE_URL}}/v1/account/sessions/email HTTP/1.1
+Content-Type: application/json
+X-Appwrite-Project: {{APPWRITE_PROJECTID}}
+
+{
+  "email": {{LOGIN_EMAIL}},
+  "password": {{LOGIN_PASSWORD}}
+}
+
+### Get Account --- using cookies (stored by default)
+GET {{BASE_URL}}/v1/account HTTP/1.1
+Content-Type: application/json
+X-Appwrite-Project: {{APPWRITE_PROJECTID}}
+
+
+### generate jwt - expires after 15 minutes at the moment --- see https://github.com/appwrite/appwrite/issues/5263
+# @name login
+POST {{BASE_URL}}/v1/account/jwt HTTP/1.1
+Content-Type: application/json
+X-Appwrite-Response-Format: 1.0.0
+X-Appwrite-Project: {{APPWRITE_PROJECTID}}
+
+###
+@jwtToken = {{login.response.body.jwt}}
+
+
+### use jwt for getting account details
+@jwtToken = {{login.response.body.jwt}}
+GET {{BASE_URL}}/v1/account HTTP/1.1
+Content-Type: application/json
+X-Appwrite-Response-Format: 1.0.0
+X-Appwrite-Project: {{APPWRITE_PROJECTID}}
+X-Appwrite-JWT: {{jwtToken}}
+
+### Get all gardens Documents for user with ownerID 644bc703994fe5db41d2
+@jwtToken = {{login.response.body.jwt}}
+GET {{BASE_URL}}/v1/databases/testing/collections/gardens/documents?queries[]=equal("ownerID","644bc703994fe5db41d2") HTTP/1.1
+Content-Type: application/json
+X-Appwrite-Project: {{APPWRITE_PROJECTID}}
+X-Appwrite-JWT: {{jwtToken}}
+
+
+### Get all sensorTypes Documents 
+@jwtToken = {{login.response.body.jwt}}
+GET {{BASE_URL}}/v1/databases/testing/collections/sensortypes/documents HTTP/1.1
+Content-Type: application/json
+X-Appwrite-Project: {{APPWRITE_PROJECTID}}
+X-Appwrite-JWT: {{jwtToken}}
+
+### Get all sensors Documents for user with ownerID 644bc703994fe5db41d2
+@jwtToken = {{login.response.body.jwt}}
+GET {{BASE_URL}}/v1/databases/testing/collections/sensors/documents?queries[]=equal("ownerID","644bc703994fe5db41d2") HTTP/1.1
+Content-Type: application/json
+X-Appwrite-Project: {{APPWRITE_PROJECTID}}
+X-Appwrite-JWT: {{jwtToken}}
+
+
+### Get all measurements Documents
+@jwtToken = {{login.response.body.jwt}}
+GET {{BASE_URL}}/v1/databases/testing/collections/measurements/documents HTTP/1.1
+Content-Type: application/json
+X-Appwrite-Project: {{APPWRITE_PROJECTID}}
+X-Appwrite-JWT: {{jwtToken}}
+
+
+### Create new measurements Document
+@jwtToken = {{login.response.body.jwt}}
+
+
+POST {{BASE_URL}}/v1/databases/testing/collections/measurements/documents HTTP/1.1
+Content-Type: application/json
+X-Appwrite-Response-Format: 1.0.0
+X-Appwrite-Project: {{APPWRITE_PROJECTID}}
+X-Appwrite-JWT: {{jwtToken}}
+
+{
+  "documentId": "unique()",
+  "data": {"sensorID": "646b48c68e111564773d", "sensorTypeID": "646b48450a17d92eb165" ,"value_float":"{{$randomInt 0 99}}.{{$randomInt 0 99}}"},
+  "permissions": ["read(\"any\")"]
+}
+
+
