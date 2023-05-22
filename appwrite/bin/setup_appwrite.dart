@@ -5,10 +5,10 @@ import 'package:dotenv/dotenv.dart';
 void main() async {
   var env = DotEnv(includePlatformEnvironment: true)..load();
 
-  final String? dbName = env['DBNAME'];
-  final String? apikey = env['APIKEY'];
-  final String? projectID = env['PROJECT_ID'];
-  final String? endpoint = env['ENDPOINT'];
+  final String? dbName = env['OKAKI_DBNAME'];
+  final String? apikey = env['OKAKI_APIKEY'];
+  final String? projectID = env['OKAKI_PROJECT_ID'];
+  final String? endpoint = env['OKAKI_ENDPOINT'];
 
   if ((dbName == null) ||
       (apikey == null) ||
@@ -157,6 +157,71 @@ void main() async {
       key: 'value_bool',
       xrequired: false);
   print("Collection measurements created");
+
+  /////////////////////////////////////////////////////
+  /// CREATE INDEXES
+  /////////////////////////////////////////////////////
+
+  //wait until all service runners finished their tasks
+  await Future.delayed(Duration(seconds: 10));
+
+  await databases.createIndex(
+    databaseId: dbName,
+    collectionId: 'gardens',
+    key: 'index_id',
+    type: 'unique',
+    attributes: ['\$id'],
+    orders: ['ASC'],
+  );
+
+  await databases.createIndex(
+    databaseId: dbName,
+    collectionId: 'gardens',
+    key: 'index_ownerID',
+    type: 'key',
+    attributes: ['ownerID'],
+    orders: ['ASC'],
+  );
+
+  print("Indexes for Collection gardens created");
+
+  await databases.createIndex(
+    databaseId: dbName,
+    collectionId: 'sensors',
+    key: 'index_id',
+    type: 'unique',
+    attributes: ['\$id'],
+    orders: ['ASC'],
+  );
+
+  await databases.createIndex(
+    databaseId: dbName,
+    collectionId: 'sensors',
+    key: 'index_ownerID',
+    type: 'key',
+    attributes: ['ownerID'],
+    orders: ['ASC'],
+  );
+
+  await databases.createIndex(
+    databaseId: dbName,
+    collectionId: 'sensors',
+    key: 'index_gardenID',
+    type: 'key',
+    attributes: ['gardenID'],
+    orders: ['ASC'],
+  );
+
+  await databases.createIndex(
+    databaseId: dbName,
+    collectionId: 'sensors',
+    key: 'index_sensorTypeID',
+    type: 'key',
+    attributes: ['sensorTypeID'],
+    orders: ['ASC'],
+  );
+
+  print("Indexes for Collection sensors created");
 
   /////////////////////////////////////////////////////
   /// CREATE DOCUMENTS
