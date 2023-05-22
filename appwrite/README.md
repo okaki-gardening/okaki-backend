@@ -21,8 +21,6 @@ OKAKI_PROJECT_ID=ENTER YOUR PROJECT ID HERE
 OKAKI_APIKEY=ENTER YOUR API KEY FOR THE PROJECT HERE
 ```
 
-you can ranem .env.example and get started from there.
-
 # Run the script
 
 You can simply run:
