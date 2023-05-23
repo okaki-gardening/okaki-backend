@@ -113,6 +113,12 @@ void main() async {
       key: 'comments',
       size: 320,
       xrequired: false);
+  await databases.createStringAttribute(
+      databaseId: dbName,
+      collectionId: 'sensors',
+      key: 'currentValue',
+      size: 128,
+      xrequired: false);
   print("Collection sensors created");
 
   await databases.createCollection(
