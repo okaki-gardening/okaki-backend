@@ -144,24 +144,9 @@ void main() async {
   await databases.createStringAttribute(
       databaseId: dbName,
       collectionId: 'measurements',
-      key: 'value_string',
+      key: 'value',
       size: 128,
-      xrequired: false);
-  await databases.createIntegerAttribute(
-      databaseId: dbName,
-      collectionId: 'measurements',
-      key: 'value_int',
-      xrequired: false);
-  await databases.createFloatAttribute(
-      databaseId: dbName,
-      collectionId: 'measurements',
-      key: 'value_float',
-      xrequired: false);
-  await databases.createBooleanAttribute(
-      databaseId: dbName,
-      collectionId: 'measurements',
-      key: 'value_bool',
-      xrequired: false);
+      xrequired: true);
   print("Collection measurements created");
 
   /////////////////////////////////////////////////////

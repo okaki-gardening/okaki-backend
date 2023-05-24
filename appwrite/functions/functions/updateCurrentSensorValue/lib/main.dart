@@ -83,16 +83,7 @@ Future<void> start(final req, final res) async {
         Document sensorDocument = documents.documents.first;
         SensorModel sensor = SensorModel.fromMap(sensorDocument.data);
 
-        String newValue = "null";
-        if (measurement.value_float != null) {
-          newValue = measurement.value_float.toString();
-        } else if (measurement.value_int != null) {
-          newValue = measurement.value_int.toString();
-        } else if (measurement.value_bool != null) {
-          newValue = measurement.value_bool.toString();
-        } else if (measurement.value_string != null) {
-          newValue = measurement.value_string!;
-        }
+        String newValue = measurement.value;
 
         var newData = {'currentValue': '$newValue'};
 
