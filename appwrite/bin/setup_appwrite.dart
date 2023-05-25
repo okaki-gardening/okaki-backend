@@ -88,7 +88,7 @@ void createTestData() async {
     data: {
       'ownerID': '644bc703994fe5db41d2',
       'name': 'Device 1',
-      'secret': 'my-secret'
+      'key': 'my-secret'
     },
   );
 
