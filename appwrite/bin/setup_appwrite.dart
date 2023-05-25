@@ -80,6 +80,65 @@ void createTestData() async {
   );
 
   print('created garden1.');
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'devices',
+    documentId: 'device1',
+    data: {
+      'ownerID': '644bc703994fe5db41d2',
+      'name': 'Device 1',
+      'secret': 'my-secret'
+    },
+  );
+
+  print('created device1.');
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'sensors',
+    documentId: 'sensor1',
+    data: {
+      'ownerID': '644bc703994fe5db41d2',
+      'name': 'Sensor 1',
+      'gardenID': 'garden1',
+      'sensorTypeID': 'float',
+    },
+  );
+
+  print('created sensor1.');
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'sensors',
+    documentId: 'sensor2',
+    data: {
+      'ownerID': '644bc703994fe5db41d2',
+      'name': 'Sensor 2',
+      'gardenID': 'garden1',
+      'sensorTypeID': 'temperature',
+    },
+  );
+
+  print('created sensor2.');
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'measurements',
+    documentId: 'measurement1',
+    data: {'sensorID': 'sensor1', 'sensorTypeID': 'float', 'value': '12.34'},
+  );
+
+  print('created measurement1.');
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'measurements',
+    documentId: 'measurement2',
+    data: {'sensorID': 'sensor1', 'sensorTypeID': 'float', 'value': '56.78'},
+  );
+
+  print('created measurement2.');
 }
 
 void main() async {
