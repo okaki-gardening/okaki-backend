@@ -375,4 +375,6 @@ void main() async {
   );
 
   print("Indexes for Collection sensors created");
+
+  createTestData();
 }
