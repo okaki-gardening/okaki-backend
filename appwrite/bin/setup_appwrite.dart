@@ -2,26 +2,101 @@ import 'package:dart_appwrite/dart_appwrite.dart';
 
 import 'package:dotenv/dotenv.dart';
 
+Client client = Client();
+Databases databases = Databases(client);
+String dbName = 'testing';
+
+void createTestData() async {
+  /////////////////////////////////////////////////////
+  /// CREATE DOCUMENTS
+  /////////////////////////////////////////////////////
+
+  //wait until all service runners finished their tasks
+  await Future.delayed(Duration(seconds: 10));
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'sensorTypes',
+    documentId: 'unique()',
+    data: {'name': 'bool'},
+  );
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'sensorTypes',
+    documentId: 'unique()',
+    data: {'name': 'int'},
+  );
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'sensorTypes',
+    documentId: 'unique()',
+    data: {'name': 'float'},
+  );
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'sensorTypes',
+    documentId: 'unique()',
+    data: {'name': 'string'},
+  );
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'sensorTypes',
+    documentId: 'unique()',
+    data: {'name': 'json'},
+  );
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'sensorTypes',
+    documentId: 'unique()',
+    data: {'name': 'temperature', 'unitName': '°C'},
+  );
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'sensorTypes',
+    documentId: 'unique()',
+    data: {'name': 'humidity', 'unitName': '%'},
+  );
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'sensorTypes',
+    documentId: 'unique()',
+    data: {'name': 'soilmoisture'},
+  );
+
+  print('created sensorTypes.');
+
+  await databases.createDocument(
+    databaseId: dbName,
+    collectionId: 'gardens',
+    documentId: 'garden1',
+    data: {'ownerID': '644bc703994fe5db41d2', 'name': 'Garten 1'},
+  );
+
+  print('created garden1.');
+}
+
 void main() async {
   var env = DotEnv(includePlatformEnvironment: true)..load();
 
-  final String? dbName = env['OKAKI_DBNAME'];
+  dbName = env.getOrElse('OKAKI_DBNAME', () => 'testing');
+
   final String? apikey = env['OKAKI_APIKEY'];
   final String? projectID = env['OKAKI_PROJECT_ID'];
   final String? endpoint = env['OKAKI_ENDPOINT'];
 
-  if ((dbName == null) ||
-      (apikey == null) ||
-      (projectID == null) ||
-      (endpoint == null)) {
+  if ((apikey == null) || (projectID == null) || (endpoint == null)) {
     print("ERROR: please check your .env file");
     return;
   }
 
-  // Init SDK
-  Client client = Client();
-  Databases databases = Databases(client);
-
+  // Init appwrite SDK
   client
       .setEndpoint(endpoint) // Your API Endpoint
       .setProject(projectID) // Your project ID
@@ -149,6 +224,34 @@ void main() async {
       xrequired: true);
   print("Collection measurements created");
 
+  await databases.createCollection(
+      databaseId: dbName,
+      collectionId: 'devices',
+      name: 'devices',
+      permissions: [
+        Permission.read(Role.any()),
+        Permission.create(Role.any())
+      ]);
+  await databases.createStringAttribute(
+      databaseId: dbName,
+      collectionId: 'devices',
+      key: 'ownerID',
+      size: 128,
+      xrequired: true);
+  await databases.createStringAttribute(
+      databaseId: dbName,
+      collectionId: 'devices',
+      key: 'name',
+      size: 128,
+      xrequired: true);
+  await databases.createStringAttribute(
+      databaseId: dbName,
+      collectionId: 'devices',
+      key: 'key',
+      size: 128,
+      xrequired: true);
+  print("Collection devices created");
+
   /////////////////////////////////////////////////////
   /// CREATE INDEXES
   /////////////////////////////////////////////////////
@@ -213,18 +316,4 @@ void main() async {
   );
 
   print("Indexes for Collection sensors created");
-
-  /////////////////////////////////////////////////////
-  /// CREATE DOCUMENTS
-  /////////////////////////////////////////////////////
-
-  //wait until all service runners finished their tasks
-  await Future.delayed(Duration(seconds: 10));
-
-  await databases.createDocument(
-    databaseId: dbName,
-    collectionId: 'sensorTypes',
-    documentId: 'unique()',
-    data: {'name': 'generic_bool'},
-  );
 }
